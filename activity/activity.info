@@ -1,0 +1,7 @@
+[Activity]
+name = Guess
+bundle_id = org.sugarlabs.numberGuessingGame
+exec = sugar-activity3 activity.GuessNumberActivity
+icon = icon
+activity_version = 1
+license = GPLv3+
