@@ -6,31 +6,27 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from button import Button
 
-#!/usr/bin/python3
 #
-# Copyright (c) 2024 Soham Kukreti
+# Copyright (C) 2024 Soham Kukreti
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at
+# your option) any later version.
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# This program is distributed in the hope that it will
+# be useful, but WITHOUT ANY WARRANTY; without even
+# the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-
-
-
+# You should have received a copy of the GNU General
+# Public License along with this program; if not,
+# write to the Free Software Foundation, Inc.,
+# 51 Franklin St, Fifth Floor, Boston, MA
+# 02110-1301  USA
+#
 
 
 class Guess:
@@ -58,20 +54,19 @@ class Guess:
         self.height = self.screen.get_height()
         self.screen.fill((145, 213, 226))
         self.img = pygame.transform.scale(self.img, (int(self.width * 0.5), int(self.height * 0.75)))
-        self.screen.blit(self.img, (self.width * 0.1, self.height - self.img.get_height()))  
+        self.screen.blit(self.img, (self.width * 0.1, self.height - self.img.get_height()))
         if self.game_state == "play" or self.game_state == "check":
             self.yes_button.draw(self.screen)
             self.no_button.draw(self.screen)
             if self.game_state == "check":
                 self.draw_text(f"Is your number : {self.numbers[0]}?", self.font, (0, 0, 0), self.width * 0.5, self.height * 0.0625)
             else:
-                self.draw_text(str(self.numbers), self.font, (0, 0, 0),self.width * 0.167, self.height * 0.0625)
+                self.draw_text(str(self.numbers), self.font, (0, 0, 0), self.width * 0.167, self.height * 0.0625)
         elif self.game_state == "win":
             self.draw_text(self.win_text, self.font, (0, 0, 0), self.width * 0.5, self.height * 0.125)
         elif self.game_state == "lose":
             self.draw_text(self.lose_text, self.font, (0, 0, 0), self.width * 0.25, self.height * 0.125)
         pygame.display.update()
-
 
     def draw_text(self, text, font, text_col, x, y):
         img = font.render(text, True, text_col)
@@ -87,7 +82,7 @@ class Guess:
         self.no_button = Button(self.width * 0.75, self.height * 0.833, no_img)
 
     def game_logic(self):
-        self.game_state =  utils.check_number(self.possible_number)
+        self.game_state = utils.check_number(self.possible_number)
         if utils.check_loss(self.possible_number):
             self.game_state = "lose"
         if not self.number_present and self.no_button.clicked == True:
@@ -138,7 +133,7 @@ class Guess:
 
 if __name__ == "__main__":
     game = Guess()
-    game.screen = pygame.display.set_mode((800, 600),pygame.RESIZABLE)
+    game.screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     game.run()
     pygame.quit()
     sys.exit()
