@@ -27,6 +27,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from button import Button
+import g
 
 
 class Guess:
@@ -36,7 +37,6 @@ class Guess:
         self.img = pygame.image.load("assets/wizard.png")
         self.size = 10
         self.possible_number = [True] * 100
-        pygame.font.init()
         self.font = pygame.font.Font(None, 48)
         self.number_present = False
         self.numbers = []
@@ -50,26 +50,23 @@ class Guess:
 
     def display(self):
         self.screen = pygame.display.get_surface()
-        self.width = self.screen.get_width()
-        self.height = self.screen.get_height()
         self.screen.fill((145, 213, 226))
-        self.img = pygame.transform.scale(self.img, (int(self.width * 0.5), int(self.height * 0.75)))
-        self.screen.blit(self.img, (self.width * 0.1, self.height - self.img.get_height()))
+        self.img = pygame.transform.scale(self.img, (int(g.w* 0.5), int(g.h * 0.75)))
+        self.screen.blit(self.img, (0, g.h - self.img.get_height()))
         if self.game_state == "play" or self.game_state == "check":
             self.yes_button.draw(self.screen)
             self.no_button.draw(self.screen)
             if self.game_state == "check":
-                self.draw_text(f"Is your number : {self.numbers[0]}?", self.font, (0, 0, 0), self.width * 0.5, self.height * 0.0625)
+                self.draw_text(f"Is your number : {self.numbers[0]}?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
             else:
-                self.draw_text("Is your number on the screen?", self.font, (0, 0, 0), self.width * 0.1, self.height * 0.03)
-                print(self.numbers)
-                coords = utils.get_coordinates(self.numbers, self.width, self.height)
+                self.draw_text("Is your number on the screen?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
+                coords = utils.get_coordinates(self.numbers, g.w, g.h)
                 for i in range(0, len(coords)):
-                    self.draw_text(str(self.numbers[i]), self.font, (0, 0, 0), coords[i][0], coords[i][1])
+                    self.draw_text(str(self.numbers[i]), g.font, (0, 0, 0), coords[i][0], coords[i][1])
         elif self.game_state == "win":
-            self.draw_text(self.win_text, self.font, (0, 0, 0), self.width * 0.5, self.height * 0.125)
+            self.draw_text(self.win_text, g.font, (0, 0, 0), g.sx(5), g.sy(0.8))
         elif self.game_state == "lose":
-            self.draw_text(self.lose_text, self.font, (0, 0, 0), self.width * 0.25, self.height * 0.125)
+            self.draw_text(self.lose_text, g.font, (0, 0, 0), g.sx(3), g.sy(0.8))
         pygame.display.update()
 
     def draw_text(self, text, font, text_col, x, y):
@@ -78,12 +75,10 @@ class Guess:
 
     def button_setup(self):
         self.screen = pygame.display.get_surface()
-        self.width = self.screen.get_width()
-        self.height = self.screen.get_height()
         yes_img = pygame.image.load('assets/Yes.png')
         no_img = pygame.image.load('assets/no.png')
-        self.yes_button = Button(self.width * 0.5625, self.height * 0.833, yes_img)
-        self.no_button = Button(self.width * 0.75, self.height * 0.833, no_img)
+        self.yes_button = Button(g.sx(15), g.sy(20), yes_img)
+        self.no_button = Button(g.sx(23), g.sy(20), no_img)
 
     def game_logic(self):
         self.game_state = utils.check_number(self.possible_number)
@@ -113,6 +108,7 @@ class Guess:
     def run(self):
         pygame.mixer.music.load('assets/theme.ogg')
         pygame.mixer.music.play(-1)
+        g.init()
         going = True
         self.button_setup()
         self.numbers = utils.get_random_numbers(self.size, self.possible_number)
@@ -140,7 +136,7 @@ class Guess:
 
 if __name__ == "__main__":
     game = Guess()
-    game.screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
+    game.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
     game.run()
     pygame.quit()
     sys.exit()
