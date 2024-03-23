@@ -90,12 +90,4 @@ class GuessNumberActivity(Activity):
 
     def _stop_cb(self, button):
         self.game.running = False
-
-    def read_file(self, file_path):
-        self.game.read_file(file_path)
-
-    def write_file(self, file_path):
-        self.game.write_file(file_path)
-
-    def get_preview(self):
-        return self._pygamecanvas.get_preview()
+        

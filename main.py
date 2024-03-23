@@ -1,11 +1,3 @@
-import pygame
-import sys
-import utils
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-from button import Button
-
 #
 # Copyright (C) 2024 Soham Kukreti
 #
@@ -27,6 +19,14 @@ from button import Button
 # 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301  USA
 #
+
+import pygame
+import sys
+import utils
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from button import Button
 
 
 class Guess:
@@ -61,7 +61,10 @@ class Guess:
             if self.game_state == "check":
                 self.draw_text(f"Is your number : {self.numbers[0]}?", self.font, (0, 0, 0), self.width * 0.5, self.height * 0.0625)
             else:
-                self.draw_text(str(self.numbers), self.font, (0, 0, 0), self.width * 0.167, self.height * 0.0625)
+                self.draw_text("Is your number on the screen?", self.font, (0, 0, 0), self.width * 0.1, self.height * 0.03)
+                coords = utils.get_coordinates(self.numbers, self.width, self.height)
+                for i in range(0, len(coords)):
+                    self.draw_text(str(self.numbers[i]), self.font, (0, 0, 0), coords[i][0], coords[i][1])
         elif self.game_state == "win":
             self.draw_text(self.win_text, self.font, (0, 0, 0), self.width * 0.5, self.height * 0.125)
         elif self.game_state == "lose":
@@ -133,7 +136,7 @@ class Guess:
 
 if __name__ == "__main__":
     game = Guess()
-    game.screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+    game.screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
     game.run()
     pygame.quit()
     sys.exit()
