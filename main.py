@@ -62,6 +62,7 @@ class Guess:
                 self.draw_text(f"Is your number : {self.numbers[0]}?", self.font, (0, 0, 0), self.width * 0.5, self.height * 0.0625)
             else:
                 self.draw_text("Is your number on the screen?", self.font, (0, 0, 0), self.width * 0.1, self.height * 0.03)
+                print(self.numbers)
                 coords = utils.get_coordinates(self.numbers, self.width, self.height)
                 for i in range(0, len(coords)):
                     self.draw_text(str(self.numbers[i]), self.font, (0, 0, 0), coords[i][0], coords[i][1])
@@ -89,8 +90,11 @@ class Guess:
         if utils.check_loss(self.possible_number):
             self.game_state = "lose"
         if not self.number_present and self.no_button.clicked == True:
-            for i in self.numbers:
-                self.possible_number[i - 1] = False
+            if self.game_state == "check":
+                self.possible_number[self.numbers[0] - 1] = False
+            else:
+                for i in self.numbers:
+                    self.possible_number[i - 1] = False
             self.no_button.clicked = False
             self.numbers = utils.get_random_numbers(self.size, self.possible_number)
         if self.number_present and self.yes_button.clicked:
