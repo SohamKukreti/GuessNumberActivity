@@ -38,7 +38,6 @@ class Guess:
         self.img = pygame.image.load("assets/wizard.png")
         self.size = 10
         self.possible_number = [True] * 100
-        self.font = pygame.font.Font(None, 48)
         self.number_present = False
         self.numbers = []
         self.win_text = ''
@@ -151,7 +150,7 @@ class Guess:
 
 if __name__ == "__main__":
     game = Guess()
-    game.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
+    game.screen = pygame.display.set_mode((800, 600))
     game.run()
     pygame.quit()
     sys.exit()
