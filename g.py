@@ -1,26 +1,28 @@
-#g.py globals
 import pygame
 
+
 def init():
-    global offset, factor
-    global screen, w, h, imgf, font
+    global offset, factor, screen
+    global black, w, h, imgf, font
     screen = pygame.display.get_surface()
     pygame.display.set_caption("Number Guesser")
-    w, h = screen.get_size() 
-    if float(w) / float(h) > 1.5:  
-        offset = (w - 4 * h // 3) // 2 
+    w, h = screen.get_size()
+    black = (0, 0, 0)
+    if float(w) / float(h) > 1.5:
+        offset = (w - 4 * h // 3) // 2
     else:
-        h = int(.75 * w) 
+        h = int(.75 * w)
         offset = 0
-    factor = float(h) / 24 
+    factor = float(h) / 24
     imgf = float(h) / 1000
     if pygame.font:
         t = int(70 * imgf)
         font = pygame.font.Font(None, t)
-    global welcome, main, end 
+    global welcome, main, end
     welcome = True
     main = False
     end = False
+
 
 def sx(f):  # scale x function
     return int(f * factor + offset + .5)

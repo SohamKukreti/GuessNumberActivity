@@ -90,4 +90,3 @@ class GuessNumberActivity(Activity):
 
     def _stop_cb(self, button):
         self.game.running = False
-        

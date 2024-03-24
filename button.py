@@ -1,10 +1,16 @@
 import pygame
 import g
 
+
 class Button:
     def __init__(self, x, y, image):
         self.image = image
-        self.image = pygame.transform.scale(self.image, (self.image.get_width() * g.imgf, self.image.get_height() * g.imgf))
+        self.image = pygame.transform.scale(
+            self.image,
+            (self.image.get_width() * g.imgf,
+             self.image.get_height() * g.imgf)
+            )
+
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.clicked = False

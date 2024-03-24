@@ -27,7 +27,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from button import Button
-import g, welcome
+import g
+import welcome
 
 
 class Guess:
@@ -48,22 +49,28 @@ class Guess:
 
     def display_game_screen(self):
         g.screen.fill((145, 213, 226))
-        self.img = pygame.transform.scale(self.img, (int(g.w* 0.5), int(g.h * 0.75)))
+        self.img = pygame.transform.scale(self.img,
+                                          (int(g.w * 0.5), int(g.h * 0.75)))
         g.screen.blit(self.img, (0, g.h - self.img.get_height()))
         if self.game_state == "play" or self.game_state == "check":
             self.yes_button.draw(g.screen)
             self.no_button.draw(g.screen)
             if self.game_state == "check":
-                utils.text_blit(f"Is your number : {self.numbers[0]}?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
+                utils.text_blit(f"Is your number : {self.numbers[0]}?",
+                                g.font, g.black, g.sx(6), g.sy(0.8))
             else:
-                utils.text_blit("Is your number on the screen?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
+                utils.text_blit("Is your number on the screen?",
+                                g.font, g.black, g.sx(6), g.sy(0.8))
                 coords = utils.get_coordinates(self.numbers, g.w, g.h)
                 for i in range(0, len(coords)):
-                    utils.text_blit(str(self.numbers[i]), g.font, (0, 0, 0), coords[i][0], coords[i][1])
+                    utils.text_blit(str(self.numbers[i]), g.font,
+                                    g.black, coords[i][0], coords[i][1])
         elif self.game_state == "win":
-            utils.text_blit(self.win_text, g.font, (0, 0, 0), g.sx(5), g.sy(0.8))
+            utils.text_blit(self.win_text, g.font,
+                            g.black, g.sx(5), g.sy(0.8))
         elif self.game_state == "lose":
-            utils.text_blit(self.lose_text, g.font, (0, 0, 0), g.sx(3), g.sy(0.8))
+            utils.text_blit(self.lose_text, g.font,
+                            g.black, g.sx(3), g.sy(0.8))
 
     def display(self):
         if g.welcome:
@@ -85,14 +92,15 @@ class Guess:
         self.game_state = utils.check_number(self.possible_number)
         if utils.check_loss(self.possible_number):
             self.game_state = "lose"
-        if not self.number_present and self.no_button.clicked == True:
+        if not self.number_present and self.no_button.clicked is True:
             if self.game_state == "check":
                 self.possible_number[self.numbers[0] - 1] = False
             else:
                 for i in self.numbers:
                     self.possible_number[i - 1] = False
             self.no_button.clicked = False
-            self.numbers = utils.get_random_numbers(self.size, self.possible_number)
+            self.numbers = utils.get_random_numbers(self.size,
+                                                    self.possible_number)
         if self.number_present and self.yes_button.clicked:
             self.yes_button.clicked = False
             if self.game_state == "check":
@@ -104,7 +112,8 @@ class Guess:
                 for num in self.numbers:
                     self.possible_number[num - 1] = True
                 self.size = int(self.size / 2)
-                self.numbers = utils.get_random_numbers(self.size, self.possible_number)
+                self.numbers = utils.get_random_numbers(self.size,
+                                                        self.possible_number)
 
     def run(self):
         pygame.mixer.music.load('assets/theme.ogg')
@@ -113,7 +122,8 @@ class Guess:
         self.button_setup()
         self.welcome = welcome.Welcome()
         going = True
-        self.numbers = utils.get_random_numbers(self.size, self.possible_number)
+        self.numbers = utils.get_random_numbers(self.size,
+                                                self.possible_number)
         while going:
             while Gtk.events_pending():
                 Gtk.main_iteration()
@@ -137,6 +147,7 @@ class Guess:
                 self.lose_text = "I could not guess your number!"
             self.display()
             self.clock.tick(30)
+
 
 if __name__ == "__main__":
     game = Guess()
