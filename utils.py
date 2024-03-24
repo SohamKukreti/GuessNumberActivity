@@ -22,6 +22,7 @@
 
 import random
 import pygame
+import g
 
 screen = pygame.display.get_surface()
 
@@ -72,3 +73,7 @@ def get_coordinates(numbers, width, height):
             x = width * 0.5
             y += width * 0.0625
     return coords
+
+def text_blit(text, font, text_col, x, y):
+    txt = font.render(text, True, text_col)
+    g.screen.blit(txt, (x, y))

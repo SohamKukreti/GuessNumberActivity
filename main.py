@@ -27,7 +27,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from button import Button
-import g
+import g, welcome
 
 
 class Guess:
@@ -43,42 +43,43 @@ class Guess:
         self.win_text = ''
         self.lose_text = ''
         pygame.mixer.init()
-        self.click_sound = pygame.mixer.Sound('assets/clicksound.ogg')
-        self.click_sound.set_volume(0.4)
         self.clock = pygame.time.Clock()
         self.game_state = "play"
 
-    def display(self):
-        self.screen = pygame.display.get_surface()
-        self.screen.fill((145, 213, 226))
+    def display_game_screen(self):
+        g.screen.fill((145, 213, 226))
         self.img = pygame.transform.scale(self.img, (int(g.w* 0.5), int(g.h * 0.75)))
-        self.screen.blit(self.img, (0, g.h - self.img.get_height()))
+        g.screen.blit(self.img, (0, g.h - self.img.get_height()))
         if self.game_state == "play" or self.game_state == "check":
-            self.yes_button.draw(self.screen)
-            self.no_button.draw(self.screen)
+            self.yes_button.draw(g.screen)
+            self.no_button.draw(g.screen)
             if self.game_state == "check":
-                self.draw_text(f"Is your number : {self.numbers[0]}?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
+                utils.text_blit(f"Is your number : {self.numbers[0]}?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
             else:
-                self.draw_text("Is your number on the screen?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
+                utils.text_blit("Is your number on the screen?", g.font, (0, 0, 0), g.sx(6), g.sy(0.8))
                 coords = utils.get_coordinates(self.numbers, g.w, g.h)
                 for i in range(0, len(coords)):
-                    self.draw_text(str(self.numbers[i]), g.font, (0, 0, 0), coords[i][0], coords[i][1])
+                    utils.text_blit(str(self.numbers[i]), g.font, (0, 0, 0), coords[i][0], coords[i][1])
         elif self.game_state == "win":
-            self.draw_text(self.win_text, g.font, (0, 0, 0), g.sx(5), g.sy(0.8))
+            utils.text_blit(self.win_text, g.font, (0, 0, 0), g.sx(5), g.sy(0.8))
         elif self.game_state == "lose":
-            self.draw_text(self.lose_text, g.font, (0, 0, 0), g.sx(3), g.sy(0.8))
+            utils.text_blit(self.lose_text, g.font, (0, 0, 0), g.sx(3), g.sy(0.8))
+
+    def display(self):
+        if g.welcome:
+            self.welcome.draw()
+        else:
+            self.display_game_screen()
         pygame.display.update()
 
-    def draw_text(self, text, font, text_col, x, y):
-        img = font.render(text, True, text_col)
-        self.screen.blit(img, (x, y))
-
     def button_setup(self):
-        self.screen = pygame.display.get_surface()
+        g.screen = pygame.display.get_surface()
         yes_img = pygame.image.load('assets/Yes.png')
         no_img = pygame.image.load('assets/no.png')
         self.yes_button = Button(g.sx(15), g.sy(20), yes_img)
         self.no_button = Button(g.sx(23), g.sy(20), no_img)
+        self.yes_button.active = False
+        self.no_button.active = False
 
     def game_logic(self):
         self.game_state = utils.check_number(self.possible_number)
@@ -109,8 +110,9 @@ class Guess:
         pygame.mixer.music.load('assets/theme.ogg')
         pygame.mixer.music.play(-1)
         g.init()
-        going = True
         self.button_setup()
+        self.welcome = welcome.Welcome()
+        going = True
         self.numbers = utils.get_random_numbers(self.size, self.possible_number)
         while going:
             while Gtk.events_pending():
@@ -118,12 +120,15 @@ class Guess:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     going = False
-                if self.yes_button.check_click(event):
-                    self.click_sound.play()
+                if self.yes_button.active and self.yes_button.check_click(event):
                     self.number_present = True
-                if self.no_button.check_click(event):
-                    self.click_sound.play()
+                if self.no_button.active and self.no_button.check_click(event):
                     self.number_present = False
+                if self.welcome.play_button.check_click(event):
+                    g.welcome = False
+                    self.welcome.play_button.active = False
+                    self.yes_button.active = True
+                    self.no_button.active = True
             if self.game_state == "play" or self.game_state == "check":
                 self.game_logic()
             elif self.game_state == "win":
@@ -132,7 +137,6 @@ class Guess:
                 self.lose_text = "I could not guess your number!"
             self.display()
             self.clock.tick(30)
-
 
 if __name__ == "__main__":
     game = Guess()

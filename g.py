@@ -13,12 +13,12 @@ def init():
         h = int(.75 * w) 
         offset = 0
     factor = float(h) / 24 
-    imgf = float(h) / 600
+    imgf = float(h) / 1000
     if pygame.font:
-        t = int(45 * imgf)
+        t = int(70 * imgf)
         font = pygame.font.Font(None, t)
     global welcome, main, end 
-    welcome = False
+    welcome = True
     main = False
     end = False
 
